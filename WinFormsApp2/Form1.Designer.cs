@@ -45,9 +45,9 @@
             this.process1 = new System.Diagnostics.Process();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.btnRemove = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.btnGetRemove = new System.Windows.Forms.Button();
             this.btnDirSize = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.btnEmptyDirs = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.oprionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -229,19 +229,19 @@
             this.btnRemove.UseVisualStyleBackColor = false;
             this.btnRemove.Click += new System.EventHandler(this.btnRemove_Click);
             // 
-            // button1
+            // btnGetRemove
             // 
-            this.button1.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button1.Location = new System.Drawing.Point(744, 273);
-            this.button1.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(377, 91);
-            this.button1.TabIndex = 20;
-            this.button1.Text = "check files removed";
-            this.toolTip1.SetToolTip(this.button1, "List files from destination which\r\ndo not longer exist in source path.");
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.btnGetRemove.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.btnGetRemove.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnGetRemove.Location = new System.Drawing.Point(744, 273);
+            this.btnGetRemove.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
+            this.btnGetRemove.Name = "btnGetRemove";
+            this.btnGetRemove.Size = new System.Drawing.Size(377, 91);
+            this.btnGetRemove.TabIndex = 20;
+            this.btnGetRemove.Text = "check files removed";
+            this.toolTip1.SetToolTip(this.btnGetRemove, "List files from destination which\r\ndo not longer exist in source path.");
+            this.btnGetRemove.UseVisualStyleBackColor = false;
+            this.btnGetRemove.Click += new System.EventHandler(this.btnGetRemove_Click);
             // 
             // btnDirSize
             // 
@@ -257,19 +257,19 @@
             this.btnDirSize.UseVisualStyleBackColor = false;
             this.btnDirSize.Click += new System.EventHandler(this.btnDirSize_Click);
             // 
-            // button2
+            // btnEmptyDirs
             // 
-            this.button2.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.button2.Location = new System.Drawing.Point(1605, 273);
-            this.button2.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(412, 91);
-            this.button2.TabIndex = 30;
-            this.button2.Text = "remove empty dirs";
-            this.toolTip1.SetToolTip(this.button2, "Remove files from destination which\r\ndo not longer exist in source path.");
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.btnEmptyDirs.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.btnEmptyDirs.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.btnEmptyDirs.Location = new System.Drawing.Point(1605, 273);
+            this.btnEmptyDirs.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
+            this.btnEmptyDirs.Name = "btnEmptyDirs";
+            this.btnEmptyDirs.Size = new System.Drawing.Size(412, 91);
+            this.btnEmptyDirs.TabIndex = 30;
+            this.btnEmptyDirs.Text = "remove empty dirs";
+            this.toolTip1.SetToolTip(this.btnEmptyDirs, "Remove files from destination which\r\ndo not longer exist in source path.");
+            this.btnEmptyDirs.UseVisualStyleBackColor = false;
+            this.btnEmptyDirs.Click += new System.EventHandler(this.btnEmptyDirs_Click);
             // 
             // menuStrip1
             // 
@@ -294,7 +294,7 @@
             // oprionsToolStripMenuItem
             // 
             this.oprionsToolStripMenuItem.Name = "oprionsToolStripMenuItem";
-            this.oprionsToolStripMenuItem.Size = new System.Drawing.Size(448, 54);
+            this.oprionsToolStripMenuItem.Size = new System.Drawing.Size(285, 54);
             this.oprionsToolStripMenuItem.Text = "options";
             this.oprionsToolStripMenuItem.Click += new System.EventHandler(this.oprionsToolStripMenuItem_Click);
             // 
@@ -399,14 +399,14 @@
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.Khaki;
             this.ClientSize = new System.Drawing.Size(2640, 1952);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.btnEmptyDirs);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.tbExists);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.tbExceptions);
             this.Controls.Add(this.cbDestDrive);
             this.Controls.Add(this.btnDirSize);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.btnGetRemove);
             this.Controls.Add(this.cbAppendSourcePath);
             this.Controls.Add(this.btnRemove);
             this.Controls.Add(this.label4);
@@ -464,14 +464,14 @@
         private System.Windows.Forms.TextBox tbSkipped;
         private System.Windows.Forms.Button btnRemove;
         private System.Windows.Forms.CheckBox cbAppendSourcePath;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button btnGetRemove;
         private System.Windows.Forms.Button btnDirSize;
         private System.Windows.Forms.ComboBox cbDestDrive;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox tbExceptions;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox tbExists;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button btnEmptyDirs;
     }
 }
 

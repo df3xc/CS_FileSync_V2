@@ -285,7 +285,6 @@ namespace CS_FileSync
             sourceRootPath = tbSourcePath.Text;
             sourceFileList = GetAllFiles(sourceRootPath, "*.*");
 
-
             foreach (directory_info_class d in DirectoryList)
             {
                 d.size = d.size / (1024 * 1024);
@@ -302,7 +301,6 @@ namespace CS_FileSync
             Dir.Show();
 
             tbAction.Text = " Finished show directory size  ";
-
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -382,12 +380,12 @@ namespace CS_FileSync
             tbAction.Text = count.ToString() + " Files removed ";
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void btnGetRemove_Click(object sender, EventArgs e)
         {
             getFilesToRemove();
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void btnEmptyDirs_Click(object sender, EventArgs e)
         {
             log("Delete empty directories in " + tbDestPath.Text + "\n");
             deleteEmptyDirectory(tbDestPath.Text);
