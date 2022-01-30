@@ -25,8 +25,6 @@ namespace CS_FileSync
         /// <param name="pattern"></param>
         /// <returns></returns>
 
-
-
         private List<file_info_class> GetFileInfos(string path, string pattern)
         {
             List<file_info_class> _sourceList = new List<file_info_class>();
@@ -102,23 +100,6 @@ namespace CS_FileSync
                         info.fileInfo = new FileInfo(s);
                         _sourceList.Add(info);
 
-                        FileAttributes attributes = File.GetAttributes(s);
-
-                        uint attr = (uint) attributes;
-                        if ((attr & 0x80000) == 0x80000)
-                        {
-                            log(" --- ON DISK --- " + s + "\n");
-
-                            // set file offline. free local space 
-                            attr = (uint)(attr & (~0x80000));
-                            attr = (uint)(attr | (0x100000));
-                            File.SetAttributes(s, (FileAttributes)attr);
-                        }
-                        else
-                        {
-                            log(" ### OFFLINE ### " + s + "\n");
-                        }
-
                         statistic.count_files++;
                         Application.DoEvents();
 
@@ -148,7 +129,7 @@ namespace CS_FileSync
         }
 
         /// <summary>
-        /// recursively walk through all directories in path
+        /// recursively walk through all directories in path.
         /// return all file infos
         /// </summary>
         /// <param name="path"></param>
@@ -207,11 +188,37 @@ namespace CS_FileSync
         {
             try
             {
+                FileAttributes attributes;
+
                 log("copy " + finfo.fileInfo + "\n");
                 log("  to " + finfo.destFullName + "\n" );
                 //              finfo.fileInfo.CopyTo(finfo.destFullName, true);
 
+                attributes = File.GetAttributes(finfo.fileInfo.FullName);
+                uint attr = (uint)attributes;
+                if ((attr & 0x80000) == 0x80000)
+                {
+                    log(" --- ON DISK --- \n");
+                    fileIsAvailable = true;
+
+                }
+                else
+                {
+                    log(" ### OFFLINE ### \n");
+                    fileIsAvailable = false;
+                }
+
                 File.Copy(finfo.fileInfo.FullName, finfo.destFullName, true);
+
+                if (fileIsAvailable == false)
+                {
+                    log(" free space of " + finfo.fileInfo.FullName + "\n");
+                    // set file offline. free local space 
+                    attr = (uint)(attr & (~0x80000));
+                    attr = (uint)(attr | (0x100000));
+                    File.SetAttributes(finfo.fileInfo.FullName, (FileAttributes)attr);
+                }
+
             }
             catch (Exception ex)
             {
@@ -223,23 +230,18 @@ namespace CS_FileSync
             threadRunning = false;
         }
 
-        // source        d:\lucky_linux\gcc\test.bin
-        // destPath      d:\temp
-        // destination   d:\temp\lueck_linux\gcc\test.bin
-
         /// <summary>
-        /// copy or replace files in destination path
+        /// synchronize (copy or replace) files into destination path
         /// </summary>
         /// <param name="source"></param>
         /// <param name="destPath"></param>
 
-        private void copyFiles(List<file_info_class> source, string destPath)
+        private void synchroniseFiles(List<file_info_class> source, string destPath)
         {
             progressBar1.Maximum = source.Count + 1;
             progressBar1.Value = 0;
 
             string previousPath = "xyz123";
-            string result = "";
 
             foreach (file_info_class finfo in source)
             {
@@ -310,10 +312,7 @@ namespace CS_FileSync
 
                         finfo.destFullName = name.Remove(0, 3);
                         finfo.destFullName = destPath + "\\" + finfo.destFullName;
-
                     }
-
-
 
                     // create destination directory
 
@@ -344,22 +343,7 @@ namespace CS_FileSync
                         {
                             tbAction.Text = " REPLACE " + finfo.destFullName;
                             log(" REPLACE " + finfo.destFullName + "\n");
-                            //finfo.info.CopyTo(finfo.destFullName, true);
-
-                            result = jonas.process_util.process_exec_wait(@"C:\Windows\SysWOW64\attrib.exe", "\"" + finfo.fileInfo.FullName + "\"");
-                            result = result.Substring(0, 17);
-
-                            if (result.Contains("P"))
-                            {
-                                log(" file on disk       : " + finfo.fileInfo.FullName + " \n");
-                                fileIsAvailable = true;
-                            }
-                            else
-                            {
-                                log(" file in cloud only : " + finfo.fileInfo.FullName + " \n");
-                                fileIsAvailable = false;
-                            }
-
+ 
                             threadRunning = true;
                             Thread t1 = new Thread(unused => copyfile(finfo, finfo.destFullName));
 
@@ -369,12 +353,6 @@ namespace CS_FileSync
                             {
                                 Application.DoEvents();
                                 Thread.Sleep(50);
-                            }
-
-                            if (fileIsAvailable == false)
-                            {
-                                result = jonas.process_util.process_exec_wait(@"C:\Windows\SysWOW64\attrib.exe", "+U -P \"" + finfo.fileInfo.FullName + "\"");
-                                log(" free space of " + finfo.fileInfo.FullName + "\n");
                             }
 
                             statistic.count_replace++;
@@ -387,27 +365,6 @@ namespace CS_FileSync
                     else
                     {
                         tbAction.Text = " COPY " + finfo.fileInfo.FullName + " TO " + finfo.destFullName;
-                        log(" Copy Source " + finfo.fileInfo.FullName + " to " + finfo.destFullName + "\n");
-                        //finfo.info.CopyTo(finfo.destFullName);
-
-                        result = jonas.process_util.process_exec_wait(@"C:\Windows\SysWOW64\attrib.exe", "\"" + finfo.fileInfo.FullName + "\"");
-                        result = result.Substring(0, 17);
-
-                        if (result.Contains("P"))
-                        {
-                            log(" file on disk       : " + finfo.fileInfo.FullName + " \n");
-                            fileIsAvailable = true;
-                        }
-                        else
-                        {
-                            log(" file in cloud only : " + finfo.fileInfo.FullName + " \n");
-                            fileIsAvailable = false;
-                        }
-
-                        if (finfo.fileInfo.IsReadOnly)
-                        {
-                            log(" ERROR : file read-only \n");
-                        }
 
                         threadRunning = true;
                         Thread t1 = new Thread(unused => copyfile(finfo, finfo.destFullName));
@@ -418,12 +375,6 @@ namespace CS_FileSync
                         {
                             Application.DoEvents();
                             Thread.Sleep(50);
-                        }
-
-                        if (fileIsAvailable ==false)
-                        {
-                            result = jonas.process_util.process_exec_wait(@"C:\Windows\SysWOW64\attrib.exe", "+U -P \"" + finfo.fileInfo.FullName + "\"");
-                            log(" free space of " + finfo.fileInfo.FullName + "\n");
                         }
 
                         //if (finfo.fileInfo.FullName.Contains(".mp4"))
@@ -458,6 +409,25 @@ namespace CS_FileSync
 
         }
 
+        /// <summary>
+        /// recursively delete empty directories
+        /// </summary>
+        /// <param name="startLocation"></param>
+
+        private void deleteEmptyDirectory(string startLocation)
+        {
+            foreach (var directory in Directory.GetDirectories(startLocation))
+            {
+                deleteEmptyDirectory(directory);
+                if (Directory.GetFiles(directory).Length == 0 &&
+                    Directory.GetDirectories(directory).Length == 0)
+                {
+                    Directory.Delete(directory, false);
+                    log(" DELETE " + directory + "\n");
+
+                }
+            }
+        }
 
     }
 

@@ -115,6 +115,7 @@ namespace CS_FileSync
         private void getFilesToRemove()
         {
             List<file_info_class> fileList = new List<file_info_class>();
+            string sourcePath = "";
             string sourceName = "";
             string fileName = "";
             Boolean found = false;
@@ -125,6 +126,7 @@ namespace CS_FileSync
             tbAction.Text = "Search files to be removed";
             Application.DoEvents();
 
+            destPath = tbDestPath.Text;
 
             log(" read all filennames in " + destPath + "\n");
             fileList = GetAllFiles(destPath, "*.*");
@@ -135,8 +137,9 @@ namespace CS_FileSync
             {
 
                 sourceName = s.fileInfo.FullName;
+                sourcePath = tbSourcePath.Text;
                 fileName = sourceName.Remove(0, 3);
-                fileName = destPath.Substring(0, 3) + fileName;
+                fileName = sourcePath.Substring(0, 3) + fileName;
 
                 if (File.Exists(fileName))
                 {
@@ -252,7 +255,7 @@ namespace CS_FileSync
             sourceFileList = GetAllFiles(sourceRootPath, "*.*");
 
             tbAction.Text = " start synchronising ";
-            copyFiles(sourceFileList, destPath);
+            synchroniseFiles(sourceFileList, destPath);
 
             tbAction.Text = " Finished synchronising ";
             sync_finished = true;
@@ -381,11 +384,15 @@ namespace CS_FileSync
 
         private void button1_Click(object sender, EventArgs e)
         {
-          
             getFilesToRemove();
         }
 
-
+        private void button2_Click(object sender, EventArgs e)
+        {
+            log("Delete empty directories in " + tbDestPath.Text + "\n");
+            deleteEmptyDirectory(tbDestPath.Text);
+            log("finisched \n");
+        }
     }
 
 
