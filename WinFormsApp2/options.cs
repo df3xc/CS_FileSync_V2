@@ -37,20 +37,22 @@ namespace CS_FileSync
         public option_class()
         {
             InitializeComponent();
-            cbOneDrive.Checked = copy_OneDrive;
-            cbSkip.Checked = skip_dot_dirs;
-            cbSkipArtifacts.Checked = skip_artifacts;
-
+            cbOneDrive.Checked = Settings.Default.CopyOneDrive;
+            cbSkip.Checked = Settings.Default.SkipDotDirs;
+            cbSkipArtifacts.Checked = Settings.Default.SkipArtifacts;
             copy_audios = Settings.Default.copy_mp3;
-            cbAudios.Checked = copy_audios;
             copy_videos = Settings.Default.copy_mp4;
-            cbVideos.Checked = copy_videos;
+            tbIgnorePaths.Text = Settings.Default.ExcludePaths;
         }
 
         private void options_FormClosing(object sender, FormClosingEventArgs e)
         {
+            Settings.Default.CopyOneDrive = cbOneDrive.Checked;
+            Settings.Default.SkipDotDirs = cbSkip.Checked;
+            Settings.Default.SkipArtifacts = cbSkipArtifacts.Checked;
             Settings.Default.copy_mp3 = cbAudios.Checked;
             Settings.Default.copy_mp4 = cbVideos.Checked;
+            Settings.Default.ExcludePaths = tbIgnorePaths.Text;
             Settings.Default.Save();
             e.Cancel = true;
             this.Hide();

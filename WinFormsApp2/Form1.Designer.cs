@@ -49,6 +49,8 @@
             this.btnDirSize = new System.Windows.Forms.Button();
             this.btnEmptyDirs = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.oprionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.label3 = new System.Windows.Forms.Label();
@@ -61,6 +63,8 @@
             this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.tbExists = new System.Windows.Forms.TextBox();
+            this.cbBreak = new System.Windows.Forms.CheckBox();
+            this.cbVerbose = new System.Windows.Forms.CheckBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -128,7 +132,7 @@
             // 
             // btnSync
             // 
-            this.btnSync.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.btnSync.BackColor = System.Drawing.Color.Gold;
             this.btnSync.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnSync.Location = new System.Drawing.Point(355, 274);
             this.btnSync.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
@@ -142,37 +146,41 @@
             // 
             // tbCopy
             // 
+            this.tbCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.tbCopy.Location = new System.Drawing.Point(2454, 723);
             this.tbCopy.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
             this.tbCopy.Name = "tbCopy";
-            this.tbCopy.Size = new System.Drawing.Size(137, 47);
+            this.tbCopy.Size = new System.Drawing.Size(137, 45);
             this.tbCopy.TabIndex = 6;
             // 
             // tbReplace
             // 
+            this.tbReplace.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.tbReplace.Location = new System.Drawing.Point(2454, 989);
             this.tbReplace.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
             this.tbReplace.Name = "tbReplace";
-            this.tbReplace.Size = new System.Drawing.Size(137, 47);
+            this.tbReplace.Size = new System.Drawing.Size(137, 45);
             this.tbReplace.TabIndex = 7;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label1.Location = new System.Drawing.Point(2449, 671);
             this.label1.Margin = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(109, 41);
+            this.label1.Size = new System.Drawing.Size(118, 39);
             this.label1.TabIndex = 8;
             this.label1.Text = "copied";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label2.Location = new System.Drawing.Point(2447, 936);
             this.label2.Margin = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(132, 41);
+            this.label2.Size = new System.Drawing.Size(148, 39);
             this.label2.TabIndex = 9;
             this.label2.Text = "replaced";
             // 
@@ -189,12 +197,12 @@
             // 
             // tbAction
             // 
-            this.tbAction.BackColor = System.Drawing.Color.PaleGoldenrod;
-            this.tbAction.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.tbAction.Location = new System.Drawing.Point(84, 1754);
+            this.tbAction.BackColor = System.Drawing.Color.Gold;
+            this.tbAction.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.tbAction.Location = new System.Drawing.Point(84, 1734);
             this.tbAction.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
             this.tbAction.Name = "tbAction";
-            this.tbAction.Size = new System.Drawing.Size(2310, 45);
+            this.tbAction.Size = new System.Drawing.Size(2310, 53);
             this.tbAction.TabIndex = 11;
             // 
             // process1
@@ -217,7 +225,7 @@
             // 
             // btnRemove
             // 
-            this.btnRemove.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.btnRemove.BackColor = System.Drawing.Color.Gold;
             this.btnRemove.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnRemove.Location = new System.Drawing.Point(1132, 273);
             this.btnRemove.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
@@ -231,7 +239,7 @@
             // 
             // btnGetRemove
             // 
-            this.btnGetRemove.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.btnGetRemove.BackColor = System.Drawing.Color.Gold;
             this.btnGetRemove.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnGetRemove.Location = new System.Drawing.Point(744, 273);
             this.btnGetRemove.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
@@ -245,7 +253,7 @@
             // 
             // btnDirSize
             // 
-            this.btnDirSize.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.btnDirSize.BackColor = System.Drawing.Color.Gold;
             this.btnDirSize.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnDirSize.Location = new System.Drawing.Point(2037, 272);
             this.btnDirSize.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
@@ -259,7 +267,7 @@
             // 
             // btnEmptyDirs
             // 
-            this.btnEmptyDirs.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.btnEmptyDirs.BackColor = System.Drawing.Color.Gold;
             this.btnEmptyDirs.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.btnEmptyDirs.Location = new System.Drawing.Point(1605, 273);
             this.btnEmptyDirs.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
@@ -275,13 +283,29 @@
             // 
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(40, 40);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
             this.optionsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Padding = new System.Windows.Forms.Padding(17, 7, 0, 7);
-            this.menuStrip1.Size = new System.Drawing.Size(2640, 59);
+            this.menuStrip1.Size = new System.Drawing.Size(2730, 59);
             this.menuStrip1.TabIndex = 12;
             this.menuStrip1.Text = "menuStrip1";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exitToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(87, 45);
+            this.fileToolStripMenuItem.Text = "&File";
+            // 
+            // exitToolStripMenuItem
+            // 
+            this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(231, 54);
+            this.exitToolStripMenuItem.Text = "e&xit";
+            this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
@@ -295,43 +319,47 @@
             // 
             this.oprionsToolStripMenuItem.Name = "oprionsToolStripMenuItem";
             this.oprionsToolStripMenuItem.Size = new System.Drawing.Size(285, 54);
-            this.oprionsToolStripMenuItem.Text = "options";
-            this.oprionsToolStripMenuItem.Click += new System.EventHandler(this.oprionsToolStripMenuItem_Click);
+            this.oprionsToolStripMenuItem.Text = "&options";
+            this.oprionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
             // label3
             // 
             this.label3.AutoSize = true;
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label3.Location = new System.Drawing.Point(2449, 1250);
             this.label3.Margin = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(123, 41);
+            this.label3.Size = new System.Drawing.Size(135, 39);
             this.label3.TabIndex = 14;
             this.label3.Text = "skipped";
             // 
             // tbSkipped
             // 
+            this.tbSkipped.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.tbSkipped.Location = new System.Drawing.Point(2455, 1303);
             this.tbSkipped.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
             this.tbSkipped.Name = "tbSkipped";
-            this.tbSkipped.Size = new System.Drawing.Size(137, 47);
+            this.tbSkipped.Size = new System.Drawing.Size(137, 45);
             this.tbSkipped.TabIndex = 13;
             // 
             // label4
             // 
             this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label4.Location = new System.Drawing.Point(2449, 540);
             this.label4.Margin = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(70, 41);
+            this.label4.Size = new System.Drawing.Size(78, 39);
             this.label4.TabIndex = 16;
             this.label4.Text = "files";
             // 
             // tbFiles
             // 
+            this.tbFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.tbFiles.Location = new System.Drawing.Point(2454, 593);
             this.tbFiles.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
             this.tbFiles.Name = "tbFiles";
-            this.tbFiles.Size = new System.Drawing.Size(137, 47);
+            this.tbFiles.Size = new System.Drawing.Size(137, 45);
             this.tbFiles.TabIndex = 15;
             // 
             // cbAppendSourcePath
@@ -353,52 +381,81 @@
             this.cbDestDrive.Location = new System.Drawing.Point(84, 294);
             this.cbDestDrive.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.cbDestDrive.Name = "cbDestDrive";
-            this.cbDestDrive.Size = new System.Drawing.Size(128, 54);
+            this.cbDestDrive.Size = new System.Drawing.Size(239, 54);
             this.cbDestDrive.TabIndex = 24;
+            this.cbDestDrive.SelectedIndexChanged += new System.EventHandler(this.cbDestDrive_SelectedIndexChanged);
             // 
             // tbExceptions
             // 
+            this.tbExceptions.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.tbExceptions.Location = new System.Drawing.Point(2455, 1424);
             this.tbExceptions.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
             this.tbExceptions.Name = "tbExceptions";
-            this.tbExceptions.Size = new System.Drawing.Size(137, 47);
+            this.tbExceptions.Size = new System.Drawing.Size(137, 45);
             this.tbExceptions.TabIndex = 26;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label5.Location = new System.Drawing.Point(2448, 1372);
             this.label5.Margin = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(160, 41);
+            this.label5.Size = new System.Drawing.Size(184, 39);
             this.label5.TabIndex = 27;
             this.label5.Text = "Exceptions";
             // 
             // label6
             // 
             this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.label6.Location = new System.Drawing.Point(2448, 799);
             this.label6.Margin = new System.Windows.Forms.Padding(10, 0, 10, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(91, 41);
+            this.label6.Size = new System.Drawing.Size(104, 39);
             this.label6.TabIndex = 29;
             this.label6.Text = "exists";
             // 
             // tbExists
             // 
+            this.tbExists.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.tbExists.Location = new System.Drawing.Point(2454, 852);
             this.tbExists.Margin = new System.Windows.Forms.Padding(10, 11, 10, 11);
             this.tbExists.Name = "tbExists";
-            this.tbExists.Size = new System.Drawing.Size(137, 47);
+            this.tbExists.Size = new System.Drawing.Size(137, 45);
             this.tbExists.TabIndex = 28;
+            // 
+            // cbBreak
+            // 
+            this.cbBreak.AutoSize = true;
+            this.cbBreak.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.cbBreak.Location = new System.Drawing.Point(691, 389);
+            this.cbBreak.Name = "cbBreak";
+            this.cbBreak.Size = new System.Drawing.Size(132, 43);
+            this.cbBreak.TabIndex = 31;
+            this.cbBreak.Text = "abort";
+            this.cbBreak.UseVisualStyleBackColor = true;
+            // 
+            // cbVerbose
+            // 
+            this.cbVerbose.AutoSize = true;
+            this.cbVerbose.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.cbVerbose.Location = new System.Drawing.Point(479, 389);
+            this.cbVerbose.Name = "cbVerbose";
+            this.cbVerbose.Size = new System.Drawing.Size(176, 43);
+            this.cbVerbose.TabIndex = 32;
+            this.cbVerbose.Text = "verbose";
+            this.cbVerbose.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(17F, 41F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.BackColor = System.Drawing.Color.Khaki;
-            this.ClientSize = new System.Drawing.Size(2640, 1952);
+            this.BackColor = System.Drawing.Color.PaleGoldenrod;
+            this.ClientSize = new System.Drawing.Size(2730, 1841);
+            this.Controls.Add(this.cbVerbose);
+            this.Controls.Add(this.cbBreak);
             this.Controls.Add(this.btnEmptyDirs);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.tbExists);
@@ -456,8 +513,6 @@
         private System.Diagnostics.Process process1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem oprionsToolStripMenuItem;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox tbFiles;
         private System.Windows.Forms.Label label3;
@@ -472,6 +527,12 @@
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.TextBox tbExists;
         private System.Windows.Forms.Button btnEmptyDirs;
+        private System.Windows.Forms.CheckBox cbBreak;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem oprionsToolStripMenuItem;
+        private System.Windows.Forms.CheckBox cbVerbose;
     }
 }
 

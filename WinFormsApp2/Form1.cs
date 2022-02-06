@@ -87,6 +87,13 @@ namespace CS_FileSync
             Application.DoEvents();
         }
 
+        private void notify(string text)
+        {
+            gt.RichTextBoxWrite(logBox, text);
+            tbAction.Text = text;
+            Application.DoEvents();
+        }
+
         private void showStatistic()
         {
             tbFiles.Text = statistic.count_files.ToString();
@@ -109,74 +116,6 @@ namespace CS_FileSync
         #endregion
 
         /// <summary>
-        /// create a list of files to be removed from destination
-        /// </summary>
-
-        private void getFilesToRemove()
-        {
-            List<file_info_class> fileList = new List<file_info_class>();
-            string sourcePath = "";
-            string sourceName = "";
-            string fileName = "";
-            Boolean found = false;
-
-            filesToRemove.Clear();
-            statistic.Clear();
-
-            tbAction.Text = "Search files to be removed";
-            Application.DoEvents();
-
-            destPath = tbDestPath.Text;
-
-            log(" read all filennames in " + destPath + "\n");
-            fileList = GetAllFiles(destPath, "*.*");
-            tbAction.Text = "Start analysis of files";
-
-            found = false;
-            foreach (file_info_class s in fileList)
-            {
-
-                sourceName = s.fileInfo.FullName;
-                sourcePath = tbSourcePath.Text;
-                fileName = sourceName.Remove(0, 3);
-                fileName = sourcePath.Substring(0, 3) + fileName;
-
-                if (File.Exists(fileName))
-                {
-                    //log(" FOUND " + sourceName + "\n");
-                    found = true;
-                }
-                else
-                {
-                    log(" TO BE REMOVED " + sourceName + "\n");
-                    filesToRemove.Add(s);
-                }
-
-                Application.DoEvents();
-
-            }
-
-
-            log("\n List of files to be removed . File count " + filesToRemove.Count + "\n");
-
-            foreach (file_info_class s in fileList)
-            {
-
-                string directory = "";
-                directory = s.fileInfo.DirectoryName;
-
-                if (Directory.GetFiles(directory).Length == 0)
-                {
-                    log(" Deleting empty directory \n");
-                }
-
-            }
-
-            tbAction.Text = "DONE : Search files to be removed";
-            Application.DoEvents();
-        }
-
-        /// <summary>
         /// select source path
         /// </summary>
         /// <param name="sender"></param>
@@ -186,7 +125,7 @@ namespace CS_FileSync
         {
             if (cbDestDrive.SelectedIndex == -1)
             {
-                MessageBox.Show("Select destination drive","ERROR",MessageBoxButtons.OK,MessageBoxIcon.Hand);
+                MessageBox.Show("Select destination drive", "ERROR", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                 return;
             }
 
@@ -208,6 +147,20 @@ namespace CS_FileSync
             }
         }
 
+        private void cbDestDrive_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            destDrive = cbDestDrive.SelectedItem.ToString();
+
+            if (sourceRootPath != string.Empty)
+            { 
+            destPath = sourceRootPath.Remove(0, 3);
+            destPath = destDrive + destPath;
+            tbDestPath.Text = destPath;
+            Settings.Default.destPath = tbDestPath.Text;
+            Settings.Default.Save();
+            }
+        }
+
         /// <summary>
         /// select destination path
         /// </summary>
@@ -225,41 +178,41 @@ namespace CS_FileSync
             }
         }
 
-        private void btnReadFiles_Click(object sender, EventArgs e)
-        {
-            logBox.Clear();
-            sourceFileList.Clear();
-            statistic.Clear();
+        /// <summary>
+        /// get a list of files to be removed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
-            sourceRootPath = tbSourcePath.Text;
-            destPath = tbDestPath.Text;
-            sourceFileList = GetAllFiles(sourceRootPath, "*.*");
-            tbAction.Text = " Finished createdl list of source files ";
-            log("Number of files found : " + sourceFileList.Count);
-            progressBar1.Value = 0;
+        private void btnRemove_Click(object sender, EventArgs e)
+        {
+            removeFiles();
         }
 
         /// <summary>
-        /// synchonise files to destination
+        /// remove files from destination
         /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
-        private void sync_to_destination()
+        private void btnGetRemove_Click(object sender, EventArgs e)
         {
-            logBox.Clear();
-            sourceFileList.Clear();
-            statistic.Clear();
+            cbBreak.Checked = false;
+            getFilesToRemove();
+        }
 
-            sourceRootPath = tbSourcePath.Text;
-            destPath = tbDestPath.Text;
-            tbAction.Text = " list all files in source path ";
-            sourceFileList = GetAllFiles(sourceRootPath, "*.*");
+        /// <summary>
+        /// remove empty directories from destination
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
 
-            tbAction.Text = " start synchronising ";
-            synchroniseFiles(sourceFileList, destPath);
-
-            tbAction.Text = " Finished synchronising ";
-            sync_finished = true;
-            progressBar1.Value = 0;
+        private void btnEmptyDirs_Click(object sender, EventArgs e)
+        {
+            notify("Delete empty directories in " + tbDestPath.Text + "\n");
+            cbBreak.Checked = false;
+            deleteEmptyDirectory(tbDestPath.Text);
+            notify("finisched \n");
         }
 
         /// <summary>
@@ -270,6 +223,7 @@ namespace CS_FileSync
 
         private void btnSync_Click(object sender, EventArgs e)
         {
+            cbBreak.Checked = false;
             sync_to_destination();
         }
 
@@ -361,35 +315,14 @@ namespace CS_FileSync
                 e.Effect = DragDropEffects.None;
         }
 
-        private void oprionsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void optionsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             opt.ShowDialog();
-        }
-
-        private void btnRemove_Click(object sender, EventArgs e)
-        {
-            int count = 0;
-
-            tbAction.Text = " ... removing files ";
-            foreach (file_info_class file in filesToRemove)
-            {
-                log(" deleting " + file.fileInfo.FullName + "\n");
-                File.Delete(file.fileInfo.FullName);
-                count++;
-            }
-            tbAction.Text = count.ToString() + " Files removed ";
-        }
-
-        private void btnGetRemove_Click(object sender, EventArgs e)
-        {
-            getFilesToRemove();
-        }
-
-        private void btnEmptyDirs_Click(object sender, EventArgs e)
-        {
-            log("Delete empty directories in " + tbDestPath.Text + "\n");
-            deleteEmptyDirectory(tbDestPath.Text);
-            log("finisched \n");
         }
     }
 

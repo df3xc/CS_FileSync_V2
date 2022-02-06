@@ -16,6 +16,96 @@ namespace CS_FileSync
 
         Boolean fileIsAvailable = false;
 
+        /// <summary>
+        /// ignore directories 
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+
+        private Boolean skipDirectory (string path)
+        {
+
+            string[] skip;
+
+            skip = opt.tbIgnorePaths.Text.Split(';', StringSplitOptions.RemoveEmptyEntries);
+
+            foreach(string s in skip)
+            {
+                string p = "\\" + s;
+
+               if (path.Contains(p))
+                {
+                    if (cbVerbose.Checked) log("#### skip dir: " + path + "\n");
+                    return (true);
+                }
+            }
+
+            if (opt.skip_dot_dirs == true && path.Contains("\\AppData"))
+            {
+                if (cbVerbose.Checked) log("#### skip dir: " + path + "\n");
+                return (true);
+            }
+
+            if (opt.skip_dot_dirs == true && path.Contains("\\Downloads"))
+            {
+                if (cbVerbose.Checked) log("#### skip dir: " + path + "\n");
+                return (true);
+            }
+
+            if (opt.skip_dot_dirs == true && path.Contains("\\obj"))
+            {
+                if (cbVerbose.Checked) log("#### skip dir: " + path + "\n");
+                return (true);
+            }
+
+            return false;
+        }
+
+        /// <summary>
+        /// ignore files
+        /// </summary>
+        /// <param name="path"></param>
+        /// <returns></returns>
+
+        Boolean skipFiles (string path)
+        {
+            if (opt.skip_dot_dirs == true && path.Contains("\\."))
+            {
+                statistic.count_skipped++;
+                return(true);
+            }
+
+            if (opt.copy_videos == false && path.EndsWith(".mp4"))
+            {
+                statistic.count_skipped++;
+                return (true);
+            }
+
+            if (opt.copy_audios == false && path.EndsWith(".mp3"))
+            {
+                statistic.count_skipped++;
+                return (true);
+            }
+            if (opt.skip_artifacts == true && path.EndsWith(".lst"))
+            {
+                statistic.count_skipped++;
+                return (true);
+            }
+
+            if (opt.skip_artifacts == true && path.EndsWith(".bak"))
+            {
+                statistic.count_skipped++;
+                return (true);
+            }
+
+            if (opt.skip_artifacts == true && path.EndsWith(".o"))
+            {
+                statistic.count_skipped++;
+                return (true);
+            }
+            return false;
+        }
+
 
         /// <summary>
         /// return all file infos from path (top directory only)
@@ -37,21 +127,8 @@ namespace CS_FileSync
 
             try
             {
-                if (opt.skip_dot_dirs == true && path.Contains("AppData"))
-                {
-                    return (_sourceList);
-                }
 
-                if (opt.skip_dot_dirs == true && path.Contains("Downloads"))
-                {
-                    return (_sourceList);
-                }
-
-                if (opt.skip_artifacts == true && path.Contains(".lst"))
-                {
-                    return (_sourceList);
-                }
-
+                if (skipDirectory(path) == true) return (sourceFileList);
 
                 filePaths = Directory.GetFiles(path, pattern, SearchOption.TopDirectoryOnly);
 
@@ -59,42 +136,7 @@ namespace CS_FileSync
                 {
                     try
                     {
-
-                        if (opt.skip_dot_dirs == true && s.Contains("\\."))
-                        {
-                            statistic.count_skipped++;
-                            continue;
-                        }
-
-                        if (opt.copy_videos == false && s.EndsWith(".mp4"))
-                        {
-                            statistic.count_skipped++;
-                            continue;
-                        }
-
-                        if (opt.copy_audios == false && s.EndsWith(".mp3"))
-                        {
-                            statistic.count_skipped++;
-                            continue;
-                        }
-
-                        if (opt.skip_artifacts == true && s.EndsWith(".lst"))
-                        {
-                            statistic.count_skipped++;
-                            continue;
-                        }
-
-                        if (opt.skip_artifacts == true && s.EndsWith(".bak"))
-                        {
-                            statistic.count_skipped++;
-                            continue;
-                        }
-
-                        if (opt.skip_artifacts == true && s.EndsWith(".o"))
-                        {
-                            statistic.count_skipped++;
-                            continue;
-                        }
+                        if (skipFiles(s) == true) continue;
 
                         file_info_class info = new file_info_class();
                         info.fileInfo = new FileInfo(s);
@@ -142,6 +184,13 @@ namespace CS_FileSync
 
             try
             {
+                Application.DoEvents();
+
+                if (cbBreak.Checked==true)
+                {
+                    return fileList;
+                }
+
                 fileList.AddRange(GetFileInfos(path, pattern));
                 foreach (var directory in Directory.GetDirectories(path))
                 {
@@ -163,7 +212,7 @@ namespace CS_FileSync
         {
             string[] filePaths;
             List<file_info_class> _sourceList = new List<file_info_class>();
-
+            cbBreak.Checked = false;
             filePaths = Directory.GetFiles(path, "*.*", SearchOption.TopDirectoryOnly);
 
             //filePaths = Directory.GetDirectories(path);
@@ -190,23 +239,24 @@ namespace CS_FileSync
             {
                 FileAttributes attributes;
 
-                log("copy " + finfo.fileInfo + "\n");
-                log("  to " + finfo.destFullName + "\n" );
                 //              finfo.fileInfo.CopyTo(finfo.destFullName, true);
 
                 attributes = File.GetAttributes(finfo.fileInfo.FullName);
                 uint attr = (uint)attributes;
                 if ((attr & 0x80000) == 0x80000)
                 {
-                    log(" --- ON DISK --- \n");
+                    log(" [ON DISK] ");
                     fileIsAvailable = true;
 
                 }
                 else
                 {
-                    log(" ### OFFLINE ### \n");
+                    log(" [IN CLOUD] ");
                     fileIsAvailable = false;
                 }
+
+                log("copy " + finfo.fileInfo + "\n");
+//                log("  to " + finfo.destFullName + "\n");
 
                 File.Copy(finfo.fileInfo.FullName, finfo.destFullName, true);
 
@@ -253,46 +303,7 @@ namespace CS_FileSync
 
                     name = finfo.fileInfo.FullName;
 
-                    if (opt.skip_dot_dirs == true && name.Contains("AppData"))
-                    {
-                        statistic.count_skipped++;
-                        continue;
-                    }
-
-                    if (opt.skip_dot_dirs == true && name.Contains("\\."))
-                    {
-                        statistic.count_skipped++;
-                        continue;
-                    }
-
-
-                    if (opt.copy_videos == false && name.Contains(".mp4"))
-                    {
-                        statistic.count_skipped++;
-                        progressBar1.Value++;
-                        continue;
-                    }
-
-                    if (opt.copy_audios == false && name.Contains(".mp3"))
-                    {
-                        statistic.count_skipped++;
-                        progressBar1.Value++;
-                        continue;
-                    }
-
-                    if (opt.copy_OneDrive == false && name.Contains("OneDrive"))
-                    {
-                        statistic.count_skipped++;
-                        progressBar1.Value++;
-                        continue;
-                    }
-
-                    if (name.Contains("RECYCLE.BIN"))
-                    {
-                        statistic.count_skipped++;
-                        progressBar1.Value++;
-                        continue;
-                    }
+                    if (skipFiles(name) == true) continue;
 
                     // create the path of the destination file
 
@@ -377,18 +388,6 @@ namespace CS_FileSync
                             Thread.Sleep(50);
                         }
 
-                        //if (finfo.fileInfo.FullName.Contains(".mp4"))
-                        //{
-                        //    result = jonas.process_util.process_exec_wait(@"C:\Windows\SysWOW64\attrib.exe", "+U -P \""+ finfo.fileInfo.FullName +"\"");
-                        //    log(" free space of " + finfo.fileInfo.FullName + "\n");
-                        //}
-
-                        //if (finfo.fileInfo.FullName.Contains(".mp3"))
-                        //{
-                        //    result = jonas.process_util.process_exec_wait(@"C:\Windows\SysWOW64\attrib.exe", "+U -P \""+ finfo.fileInfo.FullName + "\"");
-                        //    log(" free space of " + finfo.fileInfo.FullName + "\n");
-                        //}
-
                         statistic.count_copy++;
                     }
 
@@ -396,6 +395,12 @@ namespace CS_FileSync
                     showStatistic();
                     progressBar1.Value++;
                     Application.DoEvents();
+
+                    if (cbBreak.Checked == true)
+                    {
+                        log(" ABORTED \n");
+                        break;
+                    }
                 }
                 catch (Exception ex)
                 {
@@ -410,12 +415,112 @@ namespace CS_FileSync
         }
 
         /// <summary>
+        /// synchronise source to destination
+        /// </summary>
+
+        private void sync_to_destination()
+        {
+            logBox.Clear();
+            sourceFileList.Clear();
+            statistic.Clear();
+
+            sourceRootPath = tbSourcePath.Text;
+            destPath = tbDestPath.Text;
+            tbAction.Text = " list all files in source path ";
+            sourceFileList = GetAllFiles(sourceRootPath, "*.*");
+
+            tbAction.Text = " start synchronising ";
+            synchroniseFiles(sourceFileList, destPath);
+
+            tbAction.Text = " Finished synchronising ";
+            sync_finished = true;
+            progressBar1.Value = 0;
+        }
+
+        /// <summary>
+        /// create a list of files to be removed from destination
+        /// </summary>
+
+        private void getFilesToRemove()
+        {
+            List<file_info_class> fileList = new List<file_info_class>();
+            string sourcePath = "";
+            string sourceName = "";
+            string fileName = "";
+            Boolean found = false;
+
+            cbBreak.Checked = false;
+            filesToRemove.Clear();
+            statistic.Clear();
+            logBox.Clear();
+
+            notify("Search files to be removed \n");
+            Application.DoEvents();
+
+            destPath = tbDestPath.Text;
+
+            log(" read all filennames in " + destPath + "\n");
+            fileList = GetAllFiles(destPath, "*.*");
+            tbAction.Text = "Start analysis of files";
+
+            found = false;
+            foreach (file_info_class s in fileList)
+            {
+
+                sourceName = s.fileInfo.FullName;
+                sourcePath = tbSourcePath.Text;
+                fileName = sourceName.Remove(0, 3);
+                fileName = sourcePath.Substring(0, 3) + fileName;
+
+                if (File.Exists(fileName))
+                {
+                    //log(" FOUND " + sourceName + "\n");
+                    found = true;
+                }
+                else
+                {
+                    log(" TO BE REMOVED " + sourceName + "\n");
+                    filesToRemove.Add(s);
+                }
+
+                Application.DoEvents();
+
+                if (cbBreak.Checked == true)
+                {
+                    log(" ABORTED \n");
+                    break;
+                }
+            }
+            notify("\n List of files to be removed . File count " + filesToRemove.Count + "\n");
+            Application.DoEvents();
+        }
+
+        /// <summary>
+        /// remove files from destination
+        /// </summary>
+        private void removeFiles()
+        {
+            int count = 0;
+ 
+            notify("... removing files \n");
+            foreach (file_info_class file in filesToRemove)
+            {
+                log(" deleting file: " + file.fileInfo.FullName + "\n");
+                File.Delete(file.fileInfo.FullName);
+                count++;
+            }
+            notify(" number of deleted files "+ count.ToString()+ "\n");
+        }
+ 
+        /// <summary>
         /// recursively delete empty directories
         /// </summary>
         /// <param name="startLocation"></param>
 
         private void deleteEmptyDirectory(string startLocation)
         {
+            int count = 0;
+
             foreach (var directory in Directory.GetDirectories(startLocation))
             {
                 deleteEmptyDirectory(directory);
@@ -423,7 +528,8 @@ namespace CS_FileSync
                     Directory.GetDirectories(directory).Length == 0)
                 {
                     Directory.Delete(directory, false);
-                    log(" DELETE " + directory + "\n");
+                    log(" delete directory: " + directory + "\n");
+                    count++;
 
                 }
             }

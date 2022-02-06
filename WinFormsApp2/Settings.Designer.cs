@@ -70,5 +70,53 @@ namespace CS_FileSync {
                 this["destPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SkipArtifacts {
+            get {
+                return ((bool)(this["SkipArtifacts"]));
+            }
+            set {
+                this["SkipArtifacts"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SkipDotDirs {
+            get {
+                return ((bool)(this["SkipDotDirs"]));
+            }
+            set {
+                this["SkipDotDirs"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool CopyOneDrive {
+            get {
+                return ((bool)(this["CopyOneDrive"]));
+            }
+            set {
+                this["CopyOneDrive"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ExcludePaths {
+            get {
+                return ((string)(this["ExcludePaths"]));
+            }
+            set {
+                this["ExcludePaths"] = value;
+            }
+        }
     }
 }
