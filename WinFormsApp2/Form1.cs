@@ -32,8 +32,7 @@ namespace CS_FileSync
         public string output;
 
         public Boolean stopped = false;
-        public Boolean threadRunning = false;
-        public int exceptions = 0;
+         public int exceptions = 0;
 
         statistic_class statistic = new statistic_class();
         private guiThreadClass gt = new guiThreadClass();

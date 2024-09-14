@@ -14,7 +14,7 @@ namespace CS_FileSync
     public partial class Form1 : Form
     {
 
-        Boolean fileIsAvailable = false;
+        Boolean fileIsOnDisk = false;
 
         /// <summary>
         /// ignore directories 
@@ -184,6 +184,7 @@ namespace CS_FileSync
 
             try
             {
+                //log("Get files from :" + path + "\n\r");
                 Application.DoEvents();
 
                 if (cbBreak.Checked==true)
@@ -246,13 +247,13 @@ namespace CS_FileSync
                 if ((attr & 0x80000) == 0x80000)
                 {
                     log(" [ON DISK] ");
-                    fileIsAvailable = true;
+                    fileIsOnDisk = true;
 
                 }
                 else
                 {
                     log(" [IN CLOUD] ");
-                    fileIsAvailable = false;
+                    fileIsOnDisk = false;
                 }
 
                 log("copy " + finfo.fileInfo + "\n");
@@ -260,7 +261,7 @@ namespace CS_FileSync
 
                 File.Copy(finfo.fileInfo.FullName, finfo.destFullName, true);
 
-                if (fileIsAvailable == false)
+                if (fileIsOnDisk == false)
                 {
                     log(" free space of " + finfo.fileInfo.FullName + "\n");
                     // set file offline. free local space 
@@ -277,7 +278,6 @@ namespace CS_FileSync
                 statistic.count_exceptions++;
             }
 
-            threadRunning = false;
         }
 
         /// <summary>
@@ -355,12 +355,11 @@ namespace CS_FileSync
                             tbAction.Text = " REPLACE " + finfo.destFullName;
                             log(" REPLACE " + finfo.destFullName + "\n");
  
-                            threadRunning = true;
                             Thread t1 = new Thread(unused => copyfile(finfo, finfo.destFullName));
 
                             t1.Start();
-
-                            while (threadRunning)
+                            
+                            while (t1.ThreadState == ThreadState.Running)
                             {
                                 Application.DoEvents();
                                 Thread.Sleep(50);
@@ -377,12 +376,11 @@ namespace CS_FileSync
                     {
                         tbAction.Text = " COPY " + finfo.fileInfo.FullName + " TO " + finfo.destFullName;
 
-                        threadRunning = true;
                         Thread t1 = new Thread(unused => copyfile(finfo, finfo.destFullName));
 
                         t1.Start();
 
-                        while (threadRunning)
+                        while (t1.ThreadState == ThreadState.Running)
                         {
                             Application.DoEvents();
                             Thread.Sleep(50);
