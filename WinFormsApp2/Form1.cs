@@ -32,7 +32,7 @@ namespace CS_FileSync
         public string output;
 
         public Boolean stopped = false;
-         public int exceptions = 0;
+        public int exceptions = 0;
 
         statistic_class statistic = new statistic_class();
         private guiThreadClass gt = new guiThreadClass();
@@ -82,6 +82,24 @@ namespace CS_FileSync
 
         private void log(string text)
         {
+            if (text.Contains("MISSING")||text.Contains("WARNING")||text.Contains("INFO")||text.Contains("Exception"))
+            {
+                logBox.Focus();
+                logBox.SelectionColor = Color.Red;
+            }
+            else
+            {
+                logBox.Focus();
+                logBox.SelectionColor = Color.Blue;
+            }
+
+
+            if (text.Contains("copy") || text.Contains("ACTION"))
+            {
+                logBox.Focus();
+                logBox.SelectionColor = Color.Green;
+            }
+
             gt.RichTextBoxWrite(logBox,text);
             Application.DoEvents();
         }

@@ -71,35 +71,41 @@ namespace CS_FileSync
         {
             if (opt.skip_dot_dirs == true && path.Contains("\\."))
             {
+                if (cbVerbose.Checked) log("---> skip " + path);
                 statistic.count_skipped++;
                 return(true);
             }
 
             if (opt.copy_videos == false && path.EndsWith(".mp4"))
             {
+                if (cbVerbose.Checked) log("---> skip " + path);
                 statistic.count_skipped++;
                 return (true);
             }
 
             if (opt.copy_audios == false && path.EndsWith(".mp3"))
             {
+                if (cbVerbose.Checked) log("---> skip " + path);
                 statistic.count_skipped++;
                 return (true);
             }
             if (opt.skip_artifacts == true && path.EndsWith(".lst"))
             {
+                if (cbVerbose.Checked) log("---> skip " + path);
                 statistic.count_skipped++;
                 return (true);
             }
 
             if (opt.skip_artifacts == true && path.EndsWith(".bak"))
             {
+                if (cbVerbose.Checked) log("---> skip " + path);
                 statistic.count_skipped++;
                 return (true);
             }
 
             if (opt.skip_artifacts == true && path.EndsWith(".o"))
             {
+                if (cbVerbose.Checked) log("---> skip " + path);
                 statistic.count_skipped++;
                 return (true);
             }
@@ -127,10 +133,21 @@ namespace CS_FileSync
 
             try
             {
+                if(path.Contains(".vs"))
+                {
+                    int z = 0;
+                }
 
-                if (skipDirectory(path) == true) return (sourceFileList);
+                //if (skipDirectory(path) == true) return (sourceFileList);
+                if (skipDirectory(path) == true) return (_sourceList);
 
                 filePaths = Directory.GetFiles(path, pattern, SearchOption.TopDirectoryOnly);
+
+                //if(filePaths.Count()==0)
+                //{
+                //    if (cbVerbose.Checked) log(" Empty directory :" + path);
+                //    return (sourceFileList);
+                //}
 
                 foreach (string s in filePaths)
                 {
@@ -153,7 +170,7 @@ namespace CS_FileSync
                     }
                     catch (Exception ex)
                     {
-                        log(ex.Message);
+                        log("Exception:" + ex.Message);
                         statistic.count_exceptions++;
                     }
                 }
@@ -163,7 +180,7 @@ namespace CS_FileSync
             }
             catch (Exception ex)
             {
-                log(ex.Message);
+                log("Exception:"+ ex.Message);
                 statistic.count_exceptions++;
             }
 
@@ -184,7 +201,7 @@ namespace CS_FileSync
 
             try
             {
-                //log("Get files from :" + path + "\n\r");
+                if(cbVerbose.Checked) log("Get files from :" + path + "\n");
                 Application.DoEvents();
 
                 if (cbBreak.Checked==true)
@@ -198,7 +215,12 @@ namespace CS_FileSync
                     fileList.AddRange(GetAllFiles(directory, pattern));
                 }
             }
-            catch (UnauthorizedAccessException) { }
+            catch (UnauthorizedAccessException ex) 
+            {
+                log("\n ### Exception : Could not access " + path+ "\n");
+                log(ex.Message + "\n");
+                statistic.count_exceptions++;
+            }
 
             return fileList;
         }
@@ -239,21 +261,39 @@ namespace CS_FileSync
             try
             {
                 FileAttributes attributes;
-
-                //              finfo.fileInfo.CopyTo(finfo.destFullName, true);
-
                 attributes = File.GetAttributes(finfo.fileInfo.FullName);
                 uint attr = (uint)attributes;
-                if ((attr & 0x80000) == 0x80000)
+
+                //  finfo.fileInfo.CopyTo(finfo.destFullName, true);
+
+                fileIsOnDisk = true;
+
+                if (finfo.fileInfo.FullName.ToLower().Contains("onedrive"))
                 {
-                    log(" [ON DISK] ");
-                    fileIsOnDisk = true;
+
+                    if ((attr & 0x80000) == 0x80000)
+                    {
+                        log(" [ON DISK] ");
+                        fileIsOnDisk = true;
+                    }
+                    //else
+                    //{
+                    //    log(" [IN CLOUD] ");
+                    //    fileIsOnDisk = false;
+                    //}
+
+
+                    if ((attr & 0x100000) == 0x100000)
+                    {
+                        log(" [IN CLOUD] ");
+                        fileIsOnDisk = false;
+                    }
 
                 }
                 else
                 {
-                    log(" [IN CLOUD] ");
-                    fileIsOnDisk = false;
+                    log(" [ON DISK not OneDrive] ");
+                    fileIsOnDisk = true;
                 }
 
                 log("copy " + finfo.fileInfo + "\n");
@@ -355,15 +395,19 @@ namespace CS_FileSync
                             tbAction.Text = " REPLACE " + finfo.destFullName;
                             log(" REPLACE " + finfo.destFullName + "\n");
  
-                            Thread t1 = new Thread(unused => copyfile(finfo, finfo.destFullName));
+                            //Thread t1 = new Thread(unused => copyfile(finfo, finfo.destFullName));
 
-                            t1.Start();
+                            //t1.Start();
                             
-                            while (t1.ThreadState == ThreadState.Running)
-                            {
-                                Application.DoEvents();
-                                Thread.Sleep(50);
-                            }
+                            //while (t1.ThreadState == ThreadState.Running)
+                            //{
+                            //    Application.DoEvents();
+                            //    Thread.Sleep(50);
+                            //}
+
+                            copyfile(finfo, finfo.destFullName);
+                            Application.DoEvents();
+
 
                             statistic.count_replace++;
                         }
@@ -376,16 +420,18 @@ namespace CS_FileSync
                     {
                         tbAction.Text = " COPY " + finfo.fileInfo.FullName + " TO " + finfo.destFullName;
 
-                        Thread t1 = new Thread(unused => copyfile(finfo, finfo.destFullName));
+                        //Thread t1 = new Thread(unused => copyfile(finfo, finfo.destFullName));
 
-                        t1.Start();
+                        //t1.Start();
 
-                        while (t1.ThreadState == ThreadState.Running)
-                        {
-                            Application.DoEvents();
-                            Thread.Sleep(50);
-                        }
+                        //while (t1.ThreadState == ThreadState.Running)
+                        //{
+                        //    Application.DoEvents();
+                        //    Thread.Sleep(50);
+                        //}
 
+                        copyfile(finfo, finfo.destFullName);
+                        Application.DoEvents();
                         statistic.count_copy++;
                     }
 
