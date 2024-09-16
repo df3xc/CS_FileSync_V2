@@ -164,7 +164,6 @@ namespace CS_FileSync
 
                         d.size = d.size + info.fileInfo.Length;
 
-                        showStatistic();
                         Application.DoEvents();
 
                     }
@@ -184,6 +183,7 @@ namespace CS_FileSync
                 statistic.count_exceptions++;
             }
 
+            showStatistic();
             return (_sourceList);
         }
 
@@ -464,13 +464,14 @@ namespace CS_FileSync
 
         private void sync_to_destination()
         {
+            sync_finished = false;
             logBox.Clear();
             sourceFileList.Clear();
             statistic.Clear();
 
             sourceRootPath = tbSourcePath.Text;
             destPath = tbDestPath.Text;
-            tbAction.Text = " list all files in source path ";
+            tbAction.Text = " get all files in source path ";
             sourceFileList = GetAllFiles(sourceRootPath, "*.*");
 
             tbAction.Text = " start synchronising ";
@@ -498,12 +499,21 @@ namespace CS_FileSync
             statistic.Clear();
             logBox.Clear();
 
+            if (sync_finished == false)
+            {
+                //sync_to_destination();
+                tbAction.Text = " get all files in source path ";
+                sourceFileList = GetAllFiles(sourceRootPath, "*.*");
+            }
+
             notify("Search files to be removed \n");
+            tbAction.Text = "Search files to be removed ";
             Application.DoEvents();
+            statistic.Clear();
 
             destPath = tbDestPath.Text;
 
-            log(" read all filennames in " + destPath + "\n");
+            log(" read all filennames in destination " + destPath + "\n");
             fileList = GetAllFiles(destPath, "*.*");
             tbAction.Text = "Start analysis of files";
 
@@ -535,7 +545,7 @@ namespace CS_FileSync
                     break;
                 }
             }
-            notify("\n List of files to be removed . File count " + filesToRemove.Count + "\n");
+            notify("\n List of files to be removed from destination . File count " + filesToRemove.Count + "\n");
             Application.DoEvents();
         }
 
@@ -544,16 +554,27 @@ namespace CS_FileSync
         /// </summary>
         private void removeFiles()
         {
-            int count = 0;
- 
-            notify("... removing files \n");
+
+            notify("... removing files from destination \n");
+
             foreach (file_info_class file in filesToRemove)
             {
-                log(" deleting file: " + file.fileInfo.FullName + "\n");
-                File.Delete(file.fileInfo.FullName);
-                count++;
+                try
+                {
+                    log(" deleting file: " + file.fileInfo.FullName + "\n");
+                    File.Delete(file.fileInfo.FullName);
+                    statistic.count_removed++;
+                    showStatistic();
+                }
+                catch (Exception ex)
+                {
+                    log("Exception cannot remove : " + file.fileInfo.FullName + "\n");
+                    statistic.count_exceptions++;
+                }
             }
-            notify(" number of deleted files "+ count.ToString()+ "\n");
+
+            showStatistic();
+            notify(" number of deleted files "+ statistic.count_removed.ToString()+ "\n");
         }
  
         /// <summary>

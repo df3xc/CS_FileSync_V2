@@ -55,6 +55,7 @@ namespace CS_FileSync
         public int count_copy = 0;
         public int count_replace = 0;
         public int count_skipped = 0;
+        public int count_removed = 0;
         public int count_exceptions = 0;
         public int count_exists = 0;
 
@@ -64,6 +65,7 @@ namespace CS_FileSync
             count_copy = 0;
             count_replace = 0;
             count_skipped = 0;
+            count_removed = 0;
             count_exceptions = 0;
             count_exceptions = 0;
             count_exists = 0;

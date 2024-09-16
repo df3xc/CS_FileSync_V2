@@ -65,6 +65,8 @@
             this.tbExists = new System.Windows.Forms.TextBox();
             this.cbBreak = new System.Windows.Forms.CheckBox();
             this.cbVerbose = new System.Windows.Forms.CheckBox();
+            this.tbRemoved = new System.Windows.Forms.TextBox();
+            this.label7 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -431,7 +433,7 @@
             this.cbBreak.AutoSize = true;
             this.cbBreak.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.cbBreak.Location = new System.Drawing.Point(528, 304);
-            this.cbBreak.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbBreak.Margin = new System.Windows.Forms.Padding(2);
             this.cbBreak.Name = "cbBreak";
             this.cbBreak.Size = new System.Drawing.Size(108, 35);
             this.cbBreak.TabIndex = 31;
@@ -443,12 +445,32 @@
             this.cbVerbose.AutoSize = true;
             this.cbVerbose.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.cbVerbose.Location = new System.Drawing.Point(366, 304);
-            this.cbVerbose.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.cbVerbose.Margin = new System.Windows.Forms.Padding(2);
             this.cbVerbose.Name = "cbVerbose";
             this.cbVerbose.Size = new System.Drawing.Size(143, 35);
             this.cbVerbose.TabIndex = 32;
             this.cbVerbose.Text = "verbose";
             this.cbVerbose.UseVisualStyleBackColor = true;
+            // 
+            // tbRemoved
+            // 
+            this.tbRemoved.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.tbRemoved.Location = new System.Drawing.Point(1877, 872);
+            this.tbRemoved.Margin = new System.Windows.Forms.Padding(8, 9, 8, 9);
+            this.tbRemoved.Name = "tbRemoved";
+            this.tbRemoved.Size = new System.Drawing.Size(106, 37);
+            this.tbRemoved.TabIndex = 33;
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.900001F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.label7.Location = new System.Drawing.Point(1873, 832);
+            this.label7.Margin = new System.Windows.Forms.Padding(8, 0, 8, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(119, 31);
+            this.label7.TabIndex = 34;
+            this.label7.Text = "removed";
             // 
             // Form1
             // 
@@ -457,6 +479,8 @@
             this.AutoSize = true;
             this.BackColor = System.Drawing.Color.PaleGoldenrod;
             this.ClientSize = new System.Drawing.Size(2088, 1437);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.tbRemoved);
             this.Controls.Add(this.cbVerbose);
             this.Controls.Add(this.cbBreak);
             this.Controls.Add(this.btnEmptyDirs);
@@ -536,6 +560,8 @@
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem oprionsToolStripMenuItem;
         private System.Windows.Forms.CheckBox cbVerbose;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.TextBox tbRemoved;
     }
 }
 

@@ -118,6 +118,7 @@ namespace CS_FileSync
             tbExists.Text = statistic.count_exists.ToString();
             tbReplace.Text = statistic.count_replace.ToString();
             tbSkipped.Text = statistic.count_skipped.ToString();
+            tbRemoved.Text = statistic.count_removed.ToString();
             tbExceptions.Text = statistic.count_exceptions.ToString();
             Application.DoEvents();
         }
