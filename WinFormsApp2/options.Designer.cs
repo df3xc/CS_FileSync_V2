@@ -31,8 +31,7 @@
             this.cbVideos = new System.Windows.Forms.CheckBox();
             this.cbAudios = new System.Windows.Forms.CheckBox();
             this.btnOk = new System.Windows.Forms.Button();
-            this.cbOneDrive = new System.Windows.Forms.CheckBox();
-            this.cbSkip = new System.Windows.Forms.CheckBox();
+            this.cbSkipDownloads = new System.Windows.Forms.CheckBox();
             this.cbSkipArtifacts = new System.Windows.Forms.CheckBox();
             this.tbIgnorePaths = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -66,7 +65,7 @@
             // 
             // btnOk
             // 
-            this.btnOk.Location = new System.Drawing.Point(600, 324);
+            this.btnOk.Location = new System.Drawing.Point(728, 333);
             this.btnOk.Margin = new System.Windows.Forms.Padding(8, 9, 8, 9);
             this.btnOk.Name = "btnOk";
             this.btnOk.Size = new System.Drawing.Size(164, 55);
@@ -75,37 +74,24 @@
             this.btnOk.UseVisualStyleBackColor = true;
             this.btnOk.Click += new System.EventHandler(this.btnOk_Click);
             // 
-            // cbOneDrive
+            // cbSkipDownloads
             // 
-            this.cbOneDrive.AutoSize = true;
-            this.cbOneDrive.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.cbOneDrive.Location = new System.Drawing.Point(26, 102);
-            this.cbOneDrive.Margin = new System.Windows.Forms.Padding(8, 9, 8, 9);
-            this.cbOneDrive.Name = "cbOneDrive";
-            this.cbOneDrive.Size = new System.Drawing.Size(243, 40);
-            this.cbOneDrive.TabIndex = 6;
-            this.cbOneDrive.Text = "copy OneDrive";
-            this.cbOneDrive.UseVisualStyleBackColor = true;
-            this.cbOneDrive.CheckedChanged += new System.EventHandler(this.cbOneDrive_CheckedChanged);
-            // 
-            // cbSkip
-            // 
-            this.cbSkip.AutoSize = true;
-            this.cbSkip.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.cbSkip.Location = new System.Drawing.Point(818, 30);
-            this.cbSkip.Margin = new System.Windows.Forms.Padding(8, 9, 8, 9);
-            this.cbSkip.Name = "cbSkip";
-            this.cbSkip.Size = new System.Drawing.Size(440, 40);
-            this.cbSkip.TabIndex = 7;
-            this.cbSkip.Text = "skip AppData and Downloads";
-            this.cbSkip.UseVisualStyleBackColor = true;
-            this.cbSkip.CheckedChanged += new System.EventHandler(this.cbSkip_CheckedChanged);
+            this.cbSkipDownloads.AutoSize = true;
+            this.cbSkipDownloads.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.cbSkipDownloads.Location = new System.Drawing.Point(441, 84);
+            this.cbSkipDownloads.Margin = new System.Windows.Forms.Padding(8, 9, 8, 9);
+            this.cbSkipDownloads.Name = "cbSkipDownloads";
+            this.cbSkipDownloads.Size = new System.Drawing.Size(440, 40);
+            this.cbSkipDownloads.TabIndex = 7;
+            this.cbSkipDownloads.Text = "skip AppData and Downloads";
+            this.cbSkipDownloads.UseVisualStyleBackColor = true;
+            this.cbSkipDownloads.CheckedChanged += new System.EventHandler(this.cbSkip_CheckedChanged);
             // 
             // cbSkipArtifacts
             // 
             this.cbSkipArtifacts.AutoSize = true;
             this.cbSkipArtifacts.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.cbSkipArtifacts.Location = new System.Drawing.Point(441, 102);
+            this.cbSkipArtifacts.Location = new System.Drawing.Point(26, 84);
             this.cbSkipArtifacts.Margin = new System.Windows.Forms.Padding(8, 9, 8, 9);
             this.cbSkipArtifacts.Name = "cbSkipArtifacts";
             this.cbSkipArtifacts.Size = new System.Drawing.Size(280, 40);
@@ -117,7 +103,7 @@
             // 
             this.tbIgnorePaths.Font = new System.Drawing.Font("Microsoft Sans Serif", 11.1F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.tbIgnorePaths.Location = new System.Drawing.Point(26, 243);
-            this.tbIgnorePaths.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tbIgnorePaths.Margin = new System.Windows.Forms.Padding(2);
             this.tbIgnorePaths.Name = "tbIgnorePaths";
             this.tbIgnorePaths.Size = new System.Drawing.Size(1632, 41);
             this.tbIgnorePaths.TabIndex = 9;
@@ -142,8 +128,7 @@
             this.Controls.Add(this.label3);
             this.Controls.Add(this.tbIgnorePaths);
             this.Controls.Add(this.cbSkipArtifacts);
-            this.Controls.Add(this.cbSkip);
-            this.Controls.Add(this.cbOneDrive);
+            this.Controls.Add(this.cbSkipDownloads);
             this.Controls.Add(this.btnOk);
             this.Controls.Add(this.cbAudios);
             this.Controls.Add(this.cbVideos);
@@ -160,8 +145,7 @@
         private System.Windows.Forms.Button btnOk;
         public System.Windows.Forms.CheckBox cbVideos;
         public System.Windows.Forms.CheckBox cbAudios;
-        public System.Windows.Forms.CheckBox cbOneDrive;
-        public System.Windows.Forms.CheckBox cbSkip;
+        public System.Windows.Forms.CheckBox cbSkipDownloads;
         public System.Windows.Forms.CheckBox cbSkipArtifacts;
         private System.Windows.Forms.Label label3;
         public System.Windows.Forms.TextBox tbIgnorePaths;

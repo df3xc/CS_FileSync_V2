@@ -25,36 +25,49 @@ namespace CS_FileSync
         private Boolean skipDirectory (string path)
         {
 
-            string[] skip;
+            string[] skipdirs;
 
-            skip = opt.tbIgnorePaths.Text.Split(';', StringSplitOptions.RemoveEmptyEntries);
+            skipdirs = opt.tbIgnorePaths.Text.Split(';', StringSplitOptions.RemoveEmptyEntries);
 
-            foreach(string s in skip)
+            foreach(string s in skipdirs)
             {
                 string p = "\\" + s;
 
-               if (path.Contains(p))
+               if (path.ToLower().Contains(p.ToLower()))
                 {
-                    if (cbVerbose.Checked) log("#### skip dir: " + path + "\n");
+                    if (cbVerbose.Checked) log("INFO #### skip dir: " + path + "\n");
+                    statistic.count_skipped_dirs++;
                     return (true);
                 }
             }
 
-            if (opt.skip_dot_dirs == true && path.Contains("\\AppData"))
+            if (opt.skip_downloads_appdata == true && path.Contains("\\AppData"))
             {
-                if (cbVerbose.Checked) log("#### skip dir: " + path + "\n");
+                if (cbVerbose.Checked) log("INFO #### skip dir: " + path + "\n");
+                statistic.count_skipped_dirs++;
                 return (true);
             }
 
-            if (opt.skip_dot_dirs == true && path.Contains("\\Downloads"))
+            if (opt.skip_downloads_appdata == true && path.Contains("\\Downloads"))
             {
-                if (cbVerbose.Checked) log("#### skip dir: " + path + "\n");
+                if (cbVerbose.Checked) log("INFO #### skip dir: " + path + "\n");
+                statistic.count_skipped_dirs++;
                 return (true);
             }
 
             if (opt.skip_dot_dirs == true && path.Contains("\\obj"))
             {
-                if (cbVerbose.Checked) log("#### skip dir: " + path + "\n");
+                if (cbVerbose.Checked) log("INFO #### skip dir: " + path + "\n");
+                statistic.count_skipped_dirs++;
+                return (true);
+            }
+
+            /// skip .git and .vs directories
+
+            if (opt.skip_dot_dirs == true && path.Contains("\\."))
+            {
+                if (cbVerbose.Checked) log("INFO #### skip dir: " + path + "\n");
+                statistic.count_skipped_dirs++;
                 return (true);
             }
 
@@ -71,42 +84,50 @@ namespace CS_FileSync
         {
             if (opt.skip_dot_dirs == true && path.Contains("\\."))
             {
-                if (cbVerbose.Checked) log("---> skip " + path);
-                statistic.count_skipped++;
+                if (cbVerbose.Checked) log("INFO ---> skip file " + path + "\n");
+                statistic.count_skipped_files++;
                 return(true);
             }
 
             if (opt.copy_videos == false && path.EndsWith(".mp4"))
             {
-                if (cbVerbose.Checked) log("---> skip " + path);
-                statistic.count_skipped++;
+                if (cbVerbose.Checked) log("INFO ---> skip file " + path + "\n");
+                statistic.count_skipped_files++;
                 return (true);
             }
 
             if (opt.copy_audios == false && path.EndsWith(".mp3"))
             {
-                if (cbVerbose.Checked) log("---> skip " + path);
-                statistic.count_skipped++;
+                if (cbVerbose.Checked) log("INFO ---> skip file " + path + "\n");
+                statistic.count_skipped_files++;
                 return (true);
             }
+
+            if (opt.copy_audios == false && path.EndsWith(".wav"))
+            {
+                if (cbVerbose.Checked) log("INFO ---> skip file " + path + "\n");
+                statistic.count_skipped_files++;
+                return (true);
+            }
+
             if (opt.skip_artifacts == true && path.EndsWith(".lst"))
             {
-                if (cbVerbose.Checked) log("---> skip " + path);
-                statistic.count_skipped++;
+                if (cbVerbose.Checked) log("INFO ---> skip file " + path + "\n");
+                statistic.count_skipped_files++;
                 return (true);
             }
 
             if (opt.skip_artifacts == true && path.EndsWith(".bak"))
             {
-                if (cbVerbose.Checked) log("---> skip " + path);
-                statistic.count_skipped++;
+                if (cbVerbose.Checked) log("INFO ---> skip file " + path + "\n");
+                statistic.count_skipped_files++;
                 return (true);
             }
 
             if (opt.skip_artifacts == true && path.EndsWith(".o"))
             {
-                if (cbVerbose.Checked) log("---> skip " + path);
-                statistic.count_skipped++;
+                if (cbVerbose.Checked) log("INFO ---> skip file " + path + "\n");
+                statistic.count_skipped_files++;
                 return (true);
             }
             return false;
@@ -471,6 +492,7 @@ namespace CS_FileSync
 
             sourceRootPath = tbSourcePath.Text;
             destPath = tbDestPath.Text;
+            log("Read files from source " + sourceRootPath + "\n");
             tbAction.Text = " get all files in source path ";
             sourceFileList = GetAllFiles(sourceRootPath, "*.*");
 
@@ -488,10 +510,10 @@ namespace CS_FileSync
 
         private void getFilesToRemove()
         {
-            List<file_info_class> fileList = new List<file_info_class>();
+            List<file_info_class> destFileList = new List<file_info_class>();
             string sourcePath = "";
             string sourceName = "";
-            string fileName = "";
+            string sourceFileName = "";
             Boolean found = false;
 
             cbBreak.Checked = false;
@@ -499,41 +521,43 @@ namespace CS_FileSync
             statistic.Clear();
             logBox.Clear();
 
+            notify("Search files to be removed \n");
+
             if (sync_finished == false)
             {
-                //sync_to_destination();
+                log(" get all files in source path " + sourceRootPath + "\n");
                 tbAction.Text = " get all files in source path ";
                 sourceFileList = GetAllFiles(sourceRootPath, "*.*");
             }
 
-            notify("Search files to be removed \n");
             tbAction.Text = "Search files to be removed ";
             Application.DoEvents();
             statistic.Clear();
 
+            sourcePath = tbSourcePath.Text;
             destPath = tbDestPath.Text;
 
-            log(" read all filennames in destination " + destPath + "\n");
-            fileList = GetAllFiles(destPath, "*.*");
+            log(" get all files in destination " + destPath + "\n");
+            destFileList = GetAllFiles(destPath, "*.*");
             tbAction.Text = "Start analysis of files";
 
             found = false;
-            foreach (file_info_class s in fileList)
+            foreach (file_info_class s in destFileList)
             {
+                
+                sourceFileName = s.fileInfo.FullName;
+                sourceFileName = sourceFileName.Remove(0, destPath.Count());
+                sourceFileName = sourcePath+ sourceFileName;
 
-                sourceName = s.fileInfo.FullName;
-                sourcePath = tbSourcePath.Text;
-                fileName = sourceName.Remove(0, 3);
-                fileName = sourcePath.Substring(0, 3) + fileName;
-
-                if (File.Exists(fileName))
+                if (File.Exists(sourceFileName)) // find file in source path
                 {
-                    //log(" FOUND " + sourceName + "\n");
+                    if(cbVerbose.Checked) log(" FOUND in source " + sourceFileName + "\n");
                     found = true;
                 }
                 else
                 {
-                    log(" TO BE REMOVED " + sourceName + "\n");
+                    if (cbVerbose.Checked) log(" to be removed in destination " + s.fileInfo.FullName + "\n");
+                    log(" TO BE REMOVED " + s.fileInfo.FullName + "\n");
                     filesToRemove.Add(s);
                 }
 

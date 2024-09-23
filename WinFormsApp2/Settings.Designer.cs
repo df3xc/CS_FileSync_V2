@@ -118,5 +118,17 @@ namespace CS_FileSync {
                 this["ExcludePaths"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SkipDownloads {
+            get {
+                return ((bool)(this["SkipDownloads"]));
+            }
+            set {
+                this["SkipDownloads"] = value;
+            }
+        }
     }
 }

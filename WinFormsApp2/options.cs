@@ -34,12 +34,15 @@ namespace CS_FileSync
 
         public Boolean skip_artifacts = true;
 
+        public Boolean skip_downloads_appdata = true;
+
         public option_class()
         {
             InitializeComponent();
-            cbOneDrive.Checked = Settings.Default.CopyOneDrive;
-            cbSkip.Checked = Settings.Default.SkipDotDirs;
+            //cbOneDrive.Checked = Settings.Default.CopyOneDrive;
+            cbSkipDownloads.Checked = Settings.Default.SkipDotDirs;
             cbSkipArtifacts.Checked = Settings.Default.SkipArtifacts;
+            cbSkipDownloads.Checked = Settings.Default.SkipDownloads;
             copy_audios = Settings.Default.copy_mp3;
             copy_videos = Settings.Default.copy_mp4;
             tbIgnorePaths.Text = Settings.Default.ExcludePaths;
@@ -47,12 +50,13 @@ namespace CS_FileSync
 
         private void options_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Settings.Default.CopyOneDrive = cbOneDrive.Checked;
-            Settings.Default.SkipDotDirs = cbSkip.Checked;
+            //Settings.Default.CopyOneDrive = cbOneDrive.Checked;
+            Settings.Default.SkipDotDirs = cbSkipDownloads.Checked;
             Settings.Default.SkipArtifacts = cbSkipArtifacts.Checked;
             Settings.Default.copy_mp3 = cbAudios.Checked;
             Settings.Default.copy_mp4 = cbVideos.Checked;
             Settings.Default.ExcludePaths = tbIgnorePaths.Text;
+            Settings.Default.SkipDownloads = cbSkipDownloads.Checked;
             Settings.Default.Save();
             e.Cancel = true;
             this.Hide();
@@ -68,14 +72,14 @@ namespace CS_FileSync
             copy_audios = cbAudios.Checked;
         }
 
-        private void cbOneDrive_CheckedChanged(object sender, EventArgs e)
-        {
-            copy_OneDrive = cbOneDrive.Checked;
-        }
+        //private void cbOneDrive_CheckedChanged(object sender, EventArgs e)
+        //{
+        //    copy_OneDrive = cbOneDrive.Checked;
+        //}
 
         private void cbSkip_CheckedChanged(object sender, EventArgs e)
         {
-            skip_dot_dirs = cbSkip.Checked;
+            skip_downloads_appdata = cbSkipDownloads.Checked;
         }
 
         private void btnOk_Click(object sender, EventArgs e)

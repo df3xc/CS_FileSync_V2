@@ -117,7 +117,8 @@ namespace CS_FileSync
             tbCopy.Text = statistic.count_copy.ToString();
             tbExists.Text = statistic.count_exists.ToString();
             tbReplace.Text = statistic.count_replace.ToString();
-            tbSkipped.Text = statistic.count_skipped.ToString();
+            tbSkipped.Text = statistic.count_skipped_files.ToString();
+            tbSkippedDirs.Text = statistic.count_skipped_dirs.ToString();
             tbRemoved.Text = statistic.count_removed.ToString();
             tbExceptions.Text = statistic.count_exceptions.ToString();
             Application.DoEvents();

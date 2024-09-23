@@ -54,7 +54,8 @@ namespace CS_FileSync
         public int count_files = 0;
         public int count_copy = 0;
         public int count_replace = 0;
-        public int count_skipped = 0;
+        public int count_skipped_files = 0;
+        public int count_skipped_dirs = 0;
         public int count_removed = 0;
         public int count_exceptions = 0;
         public int count_exists = 0;
@@ -64,7 +65,8 @@ namespace CS_FileSync
             count_files = 0;
             count_copy = 0;
             count_replace = 0;
-            count_skipped = 0;
+            count_skipped_files = 0;
+            count_skipped_dirs = 0;
             count_removed = 0;
             count_exceptions = 0;
             count_exceptions = 0;
